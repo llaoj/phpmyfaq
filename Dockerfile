@@ -30,6 +30,7 @@ ADD conf/supervisor/ /etc/supervisor/conf.d/
 
 WORKDIR /app
 
+RUN ssh -T git@github.com
 RUN git clone git@github.com:thorsten/phpMyFAQ.git 3.0
 RUN cd phpMyFAQ
 RUN curl -s https://getcomposer.org/installer | php
