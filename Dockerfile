@@ -21,8 +21,11 @@ RUN tar -zxvf phpMyFAQ-3.0.12.tar.gz \
     && cd phpMyFAQ-3.0.12 \
     && composer install \
     && yarn install \
-    && yarn build
+    && yarn build \
+    && mkdir attachments config data images
+
 RUN cp -rf /faq/phpMyFAQ-3.0.12/. /var/www/html/ \
-    && rm -rf /faq
+    && rm -rf /faq \
+    && chmod -R 777 /var/www/html/*
 
 WORKDIR /var/www/html
