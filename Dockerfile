@@ -23,5 +23,6 @@ RUN tar -zxvf phpMyFAQ-3.0.12.tar.gz \
     && cd phpMyFAQ-3.0.12 \
     && composer install \
     && yarn install \
-    && yarn build \
-    && mv -f /app/phpMyFAQ-3.0.12 /var/www/html
+    && yarn build
+
+RUN mv -f /var/www/html/phpMyFAQ-3.0.12 /var/www/html
