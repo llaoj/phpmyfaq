@@ -33,6 +33,13 @@ ADD conf/supervisor/ /etc/supervisor/conf.d/
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
+# yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
+    && apt update \
+    && apt install yarn \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /var/www/html
 
 COPY phpMyFAQ-3.0.12.tar.gz .
@@ -41,7 +48,6 @@ COPY phpMyFAQ-3.0.12.tar.gz .
 RUN tar -zxvf phpMyFAQ-3.0.12.tar.gz \
     && cd phpMyFAQ-3.0.12 \
     && composer install \
-    && curl -o- -L https://yarnpkg.com/install.sh | bash \
     && yarn install \
     && yarn build \
     && cp nginx.conf /etc/nginx/conf.d/
