@@ -23,9 +23,9 @@ RUN pecl install redis && docker-php-ext-enable redis
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN mkdir -p /root/.ssh/ && echo "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null" > /root/.ssh/config
 
-ADD conf/php-user.ini $PHP_INI_DIR/conf.d/
-ADD conf/zz-user.conf $PHP_INI_DIR/../php-fpm.d/
-ADD conf/supervisor/ /etc/supervisor/conf.d/
+COPY conf/php-user.ini $PHP_INI_DIR/conf.d/
+COPY conf/zz-user.conf $PHP_INI_DIR/../php-fpm.d/
+COPY conf/supervisor/ /etc/supervisor/conf.d/
 
 # composer
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -43,13 +43,14 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 WORKDIR /var/www/html
 
 COPY phpMyFAQ-3.0.12.tar.gz .
+COPY conf/nginx.conf /etc/nginx/conf.d/
 
 # phpmyfaq
 RUN tar -zxvf phpMyFAQ-3.0.12.tar.gz \
-    && cd phpMyFAQ-3.0.12 \
+    && mv phpMyFAQ-3.0.12 phpmyfaq\
+    && cd phpmyfaq \
     && composer install \
     && yarn install \
-    && yarn build \
-    && cp nginx.conf /etc/nginx/conf.d/
+    && yarn build
 
 CMD ["supervisord","-n"]
