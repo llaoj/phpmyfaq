@@ -1,6 +1,6 @@
 FROM php:8.0-fpm
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt remove nodejs && apt-get install -y \
         git \
         libzip-dev \
         zip \
@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         nginx \
         supervisor \
+        nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
