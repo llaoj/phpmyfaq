@@ -13,16 +13,16 @@ RUN apt update \
     && apt install -y yarn \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /var/www/html
-
-COPY phpMyFAQ-3.0.12.tar.gz .
-
 # phpmyfaq
+WORKDIR /faq
+COPY phpMyFAQ-3.0.12.tar.gz .
 RUN tar -zxvf phpMyFAQ-3.0.12.tar.gz \
     && rm -f phpMyFAQ-3.0.12.tar.gz \
     && cd phpMyFAQ-3.0.12 \
     && composer install \
     && yarn install \
     && yarn build
+RUN cp -rf /faq/phpMyFAQ-3.0.12/. /var/www/html/ \
+    && rm -rf /faq
 
-RUN mv -f /var/www/html/phpMyFAQ-3.0.12 /var/www/html
+WORKDIR /var/www/html
