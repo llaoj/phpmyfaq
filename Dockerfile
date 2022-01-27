@@ -28,17 +28,21 @@ ADD conf/php-user.ini $PHP_INI_DIR/conf.d/
 ADD conf/zz-user.conf $PHP_INI_DIR/../php-fpm.d/
 ADD conf/supervisor/ /etc/supervisor/conf.d/
 
+# composer
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
+
+# yarn
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
 WORKDIR /app
 
-RUN ssh -T git@github.com
-RUN git clone git@github.com:thorsten/phpMyFAQ.git 3.0
-RUN cd phpMyFAQ
-RUN curl -s https://getcomposer.org/installer | php
-RUN composer install
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
-RUN yarn install
-RUN yarn build
-
-COPY nginx.conf /etc/nginx/conf.d/
+# phpmyfaq
+RUN curl -SL https://github.com/thorsten/phpMyFAQ/archive/refs/tags/3.0.12.tar.gz | tar -xJC /var/www/html \
+    && cd phpMyFAQ-3.0.12 \
+    && composer install \
+    && yarn install \
+    && yarn build \
+    && cp nginx.conf /etc/nginx/conf.d/
 
 CMD ["supervisord","-n"]
