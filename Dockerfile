@@ -38,8 +38,10 @@ RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
 WORKDIR /var/www/html
 
+COPY phpMyFAQ-3.0.12.tar.gz .
+
 # phpmyfaq
-RUN tar -zxvf ./phpMyFAQ-3.0.12.tar.gz \
+RUN tar -zxvf phpMyFAQ-3.0.12.tar.gz \
     && cd phpMyFAQ-3.0.12 \
     && composer install \
     && yarn install \
