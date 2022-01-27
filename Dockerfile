@@ -36,10 +36,10 @@ RUN curl -sS https://getcomposer.org/installer | php \
 # yarn
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
-WORKDIR /app
+WORKDIR /var/www/html
 
 # phpmyfaq
-RUN curl -SL https://github.com/thorsten/phpMyFAQ/archive/refs/tags/3.0.12.tar.gz | tar -xJC /var/www/html \
+RUN tar -zxvf ./phpMyFAQ-3.0.12.tar.gz \
     && cd phpMyFAQ-3.0.12 \
     && composer install \
     && yarn install \
