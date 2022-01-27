@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         nginx \
-        supervisor \
-    && rm -rf /var/lib/apt/lists/*
+        supervisor
 
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -33,11 +32,12 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
 # yarn
+RUN apt remove nodejs \
+    && apt install -y nodejs gnupg2
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt update \
-    && apt remove nodejs \
-    && apt install -y nodejs gnupg2 yarn \
+    && apt install -y yarn \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
