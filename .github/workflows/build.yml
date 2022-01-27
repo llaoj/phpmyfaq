@@ -1,0 +1,22 @@
+name: Buid image and push to aliyun ACR
+
+on:
+  push:
+    tags:
+    - 'v[0-9].[0-9]+.[0-9]+'
+
+env:
+  IMAGE_NAME: llaoj/phpmyfaq
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Buid image and push to aliyun ACR
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          docker build -f deploy/Dockerfile -t ${{ secrets.REGISTRY }}/$IMAGE_NAME:$TAG_NAME .
+          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY }}
+          docker push ${{ secrets.REGISTRY }}/$IMAGE_NAME:$TAG_NAME
