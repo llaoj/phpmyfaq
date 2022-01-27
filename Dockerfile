@@ -1,6 +1,6 @@
 FROM php:8.0-fpm
 
-RUN apt-get update && apt remove nodejs && apt-get install -y \
+RUN apt-get update && apt-get install -y \
         git \
         libzip-dev \
         zip \
@@ -10,7 +10,6 @@ RUN apt-get update && apt remove nodejs && apt-get install -y \
         libpng-dev \
         nginx \
         supervisor \
-        nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
@@ -37,7 +36,8 @@ RUN curl -sS https://getcomposer.org/installer | php \
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt update \
-    && apt install yarn \
+    && apt remove nodejs \
+    && apt install -y nodejs gnupg2 yarn \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
