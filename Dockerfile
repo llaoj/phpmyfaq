@@ -1,7 +1,13 @@
-FROM ubuntu:20.04
+FROM phpmyfaq/phpmyfaq
 
 WORKDIR /faq
 COPY . .
-RUN chmod +x /faq/bootstrap.sh
+RUN tar -zxvf files_phpmyfaq-3.0.12.tar.gz -C \
+	&& mkdir -p phpmyfaq/attachments \
+	&& mkdir -p phpmyfaq/data \
+	&& mkdir -p phpmyfaq/images \
+	&& cp -rf phpmyfaq/. /var/www/html/ \
+	&& chmod -R 777 /var/www/html/*
 
-CMD ["/faq/bootstrap.sh"]
+WORKDIR /var/www/html
+RUN rm -rf /faq
