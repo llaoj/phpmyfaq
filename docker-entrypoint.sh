@@ -18,26 +18,9 @@ mkdir -vp $folders
   chmod 775 $folders
 }
 
-##=== Check database vars ===
-#=== DB host ===
-if [ -z "$PMF_DB_HOST" -a ! -e "./config/database.php" ]; then
-  echo >&2 'WARN: missing PMF_DB_HOST environment variable'
-  echo >&2 '  Did you forget to --link some_mysql_container:db ?'
-else
-  #=== DB user and pass ===
-  : ${PMF_DB_USER:=root}
-  if [ "$PMF_DB_USER" = 'root' ]; then
-    : ${PMF_DB_PASS:=$DB_ENV_MYSQL_ROOT_PASSWORD}
-  fi
-
-  if [ -z "$PMF_DB_PASS" ]; then
-    echo >&2 'ERROR: missing required PMF_DB_PASS environment variable'
-    echo >&2 '  Did you forget to -e PMF_DB_PASS=... ?'
-    echo >&2
-    echo >&2 '  (Also of interest might be PMF_DB_USER and PMF_DB_NAME.)'
-    exit 1
-  #=== Setup database if needed ===
-  elif [ 0 -eq 1 ]; then # TODO : Add something like: php setup/maintenance.php --vars...
+#=== DB Config ===
+if [ ! -f "./config/database.php" ]; then
+  if [ $PMF_DB_PASS ]; then 
     {
       echo "<?php"
       echo "\$DB['server'] = '$PMF_DB_HOST';"
