@@ -2,7 +2,7 @@ FROM phpmyfaq/phpmyfaq
 
 WORKDIR /faq
 COPY . .
-RUN tar -zxvf files_phpmyfaq-3.0.12.tar.gz -C \
+RUN tar -zxvf files_phpmyfaq-3.0.12.tar.gz \
 	&& mkdir -p phpmyfaq/attachments \
 	&& mkdir -p phpmyfaq/data \
 	&& mkdir -p phpmyfaq/images \
