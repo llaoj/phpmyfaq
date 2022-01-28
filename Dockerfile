@@ -11,3 +11,6 @@ RUN tar -zxvf files_phpmyfaq-3.0.12.tar.gz \
 
 WORKDIR /var/www/html
 RUN rm -rf /faq
+
+COPY docker-entrypoint.sh /entrypoint
+RUN chmod +x /entrypoint
